@@ -9,6 +9,8 @@
     {
       devShells.${system}.default = pkgs.mkShell {
         name = "muu";
+
+        hardeningDisable = [ "fortify" ];
         packages = with pkgs; [
           nlohmann_json
 
