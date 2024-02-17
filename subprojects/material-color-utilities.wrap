@@ -1,0 +1,8 @@
+[wrap-file]
+url = https://github.com/material-foundation/material-color-utilities
+revision = head
+depth = 1
+#source-url = https://github.com/material-foundation/material-color-utilities/archive/refs/heads/main.zip
+#source-filename = 
+#source-hash = da39a3ee5e6b4b0d3255bfef95601890afd80709
+patch-directory = material-color-utilities
