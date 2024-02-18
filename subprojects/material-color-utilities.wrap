@@ -1,8 +1,15 @@
+# Also brings in .git/ folder, which breaks git
+#[wrap-git]
+#url = https://github.com/material-foundation/material-color-utilities
+#revision = head
+#depth = 1
+
 [wrap-file]
-url = https://github.com/material-foundation/material-color-utilities
-revision = head
-depth = 1
-#source-url = https://github.com/material-foundation/material-color-utilities/archive/refs/heads/main.zip
-#source-filename = 
-#source-hash = da39a3ee5e6b4b0d3255bfef95601890afd80709
-patch-directory = material-color-utilities
+patch_directory = material-color-utilities
+
+# GitHub automatically append's the git rev to the file name
+directory = material-color-utilities-main
+
+source_url = https://github.com/material-foundation/material-color-utilities/archive/refs/heads/main.tar.gz
+source_filename = material-color-utilities-main.tar.gz
+source_hash = 360d0f10a7708621ea82010ece7679dc3908a1a1ccd45bdadd555a07d45791f1

@@ -5,21 +5,19 @@ project('muu', 'cpp', version: '0.0.1',
   ]
 )
 
+material_color_utilities = subproject('material-color-utilities')
+material_color_utilities_dep = material_color_utilities.get_variable('material_color_utilities_dep')
+
 json = dependency('nlohmann_json')
 
-globber = run_command('sh', '-c', 'find . -name "*.cpp" | sort', check: true)
-src = globber.stdout().strip().split('\n')
 muu_sources = files(
   'src/main.cpp',
 )
-include_directories = include_directories(
-  'include/material-color-utilities/cpp',
-  'include/material-color-utilities/', # needed for the mcu headers
-  'include', 
-)
+include_directories = include_directories('src')
+
 executable('muu',
   muu_sources, 
   include_directories: include_directories,
-  dependencies: [json],
+  dependencies: [json, material_color_utilities_dep],
   install: false
 )
