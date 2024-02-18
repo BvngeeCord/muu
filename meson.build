@@ -1,7 +1,8 @@
 project('muu', 'cpp', version: '0.0.1',
   default_options: [
-    'optimization=3',
     'cpp_std=c++20',
+    'buildtype=release',
+    'default_library=static',
   ]
 )
 

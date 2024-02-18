@@ -8,8 +8,8 @@
 patch_directory = material-color-utilities
 
 # GitHub automatically append's the git rev to the file name
-directory = material-color-utilities-main
+directory = material-color-utilities-13434b50dcb64a482cc91191f8cf6151d90f5465
 
-source_url = https://github.com/material-foundation/material-color-utilities/archive/refs/heads/main.tar.gz
-source_filename = material-color-utilities-main.tar.gz
-source_hash = 360d0f10a7708621ea82010ece7679dc3908a1a1ccd45bdadd555a07d45791f1
+source_url = https://github.com/material-foundation/material-color-utilities/archive/13434b50dcb64a482cc91191f8cf6151d90f5465.tar.gz
+source_filename = material-color-utilities-13434b50dcb64a482cc91191f8cf6151d90f5465.tar.gz
+source_hash = 93035df66623aadb08fbc9d95f4cf00e4874bd3e754cd461c8b2599226d03983
