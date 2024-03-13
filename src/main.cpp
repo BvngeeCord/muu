@@ -3,16 +3,48 @@
 #include <cpp/dynamiccolor/material_dynamic_colors.h>
 #include <cpp/scheme/scheme_tonal_spot.h>
 #include <cpp/utils/utils.h>
+#include <cstdint>
 #include <format>
 #include <iomanip>
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <cpp/quantize/wsmeans.h>
 
+#include <Magick++.h>
+
 using json = nlohmann::json;
-using namespace material_color_utilities;
+namespace mcu = material_color_utilities;
 
 int main(int argc, char *argv[]) {
+  Magick::InitializeMagick(*argv);
+  const auto img = Magick::Image(argv[0]);
+
+  std::vector<mcu::Argb> argbs = {};
+  std::cout << "Guessed size: " << sizeof(mcu::Argb) * img.rows() * img.columns() << "\n";
+
+  const Magick::Quantum *pixels = img.getConstPixels(0, 0, img.columns(), img.rows());
+  for (size_t i = 0; i < img.rows(); i++) {
+    for (size_t j = 0; j < img.columns(); j++) {
+      // does this even work? Not sure yet. cursed
+      uint8_t r = *reinterpret_cast<uint8_t*>((float*)pixels++);
+      uint8_t g = *reinterpret_cast<uint8_t*>((float*)pixels++);
+      uint8_t b = *reinterpret_cast<uint8_t*>((float*)pixels++);
+      pixels++; // ignore alpha
+      argbs.push_back(mcu::Argb(
+        (r << 8) | (g << 4) | (b << 0)
+      ));
+    }
+  }
+  for (mcu::Argb argb : argbs) {
+      std::cout << mcu::HexFromArgb(argb) << "\n";
+  }
+
+  std::cout << "Real final size: " << argbs.size() << "\n";
+}
+
+/*
+
+
   //QuantizerResult r = QuantizeWsmeans(std::vector<Argb>{}, std::vector<Argb>{}, 10);
   
   json palette = json::object();
@@ -75,4 +107,4 @@ int main(int argc, char *argv[]) {
   palette["OnTertiaryFixedVariant"] = HexFromArgb(MaterialDynamicColors::OnTertiaryFixedVariant().GetArgb(s));
 
   std::cout << std::setw(2) << palette << std::endl;
-}
+*/

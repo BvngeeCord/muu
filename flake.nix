@@ -20,8 +20,11 @@
             name = "muu";
 
             hardeningDisable = [ "fortify" ];
+
+            
             packages = with pkgs; [
               nlohmann_json
+              imagemagick
 
               # needed by material-color-utilities
               (abseil-cpp.override { inherit stdenv; })
