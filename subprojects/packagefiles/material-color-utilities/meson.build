@@ -1,9 +1,4 @@
-project('material-color-utilities', 'cpp',
-  default_options: [
-    'optimization=3',
-    'cpp_std=c++20',
-  ]
-)
+project('material-color-utilities', 'cpp', default_options: [])
 
 # bad practice but I'm lazy
 src_globber = run_command('sh', '-c', 'find ./cpp -type f -name "*.cc" | grep -vE ".*test\.cc" | sort', check: true)
