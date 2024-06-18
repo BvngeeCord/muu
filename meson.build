@@ -1,8 +1,6 @@
 project('muu', 'cpp', version: '0.0.1',
   default_options: [
     'cpp_std=c++20',
-    'buildtype=release',
-    'optimization=3'
   ]
 )
 
@@ -16,7 +14,8 @@ magick = dependency('Magick++')
 # magick_ldflags = run_command('Magick++-config', '--ldflags', check: true) # --libs
 # add_project_arguments(magick_cppflags.stdout().replace('\n', '').split(' '), language: 'cpp')
 # add_project_link_arguments(magick_ldflags.stdout().replace('\n', '').split(' '), language: 'cpp')
-add_project_link_arguments('-v', language: 'cpp')
+
+# add_project_link_arguments('-v', language: 'cpp')
 
 muu_sources = files(
   'src/main.cpp',

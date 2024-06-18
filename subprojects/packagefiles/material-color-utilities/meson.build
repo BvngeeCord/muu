@@ -1,9 +1,11 @@
-project('material-color-utilities', 'cpp', default_options: [])
+project('material-color-utilities', 'cpp',
+  default_options: []
+)
 
 # bad practice but I'm lazy
 src_globber = run_command('sh', '-c', 'find ./cpp -type f -name "*.cc" | grep -vE ".*test\.cc" | sort', check: true)
 mcu_src = files(src_globber.stdout().strip().split('\n'))
-mcu_header_dirs = include_directories('.', './cpp')
+mcu_header_dirs = include_directories('./cpp')
 
 #googletest = dependency('gtest')
 absl_flat_hash_map = dependency('absl_flat_hash_map')
