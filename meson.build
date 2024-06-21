@@ -15,16 +15,14 @@ magick = dependency('Magick++')
 # add_project_arguments(magick_cppflags.stdout().replace('\n', '').split(' '), language: 'cpp')
 # add_project_link_arguments(magick_ldflags.stdout().replace('\n', '').split(' '), language: 'cpp')
 
-# add_project_link_arguments('-v', language: 'cpp')
-
 muu_sources = files(
   'src/main.cpp',
 )
 include_dirs = include_directories('src')
 
-executable('muu',
-  muu_sources, 
+executable('muu', muu_sources, 
   include_directories: include_dirs,
+  implicit_include_directories: false, # excludes . and ./build
   dependencies: [
     json,
     magick,
