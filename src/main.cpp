@@ -1,4 +1,5 @@
 #include "Magick++/Functions.h"
+#include "Magick++/Geometry.h"
 #include "Magick++/Image.h"
 #include "nlohmann/json.hpp"
 
@@ -11,6 +12,7 @@
 #include "score/score.h"
 #include "utils/utils.h"
 
+#include <bits/types/clock_t.h>
 #include <cstdint>
 #include <ctime>
 #include <format>
@@ -23,35 +25,48 @@ using json = nlohmann::json;
 namespace mcu = material_color_utilities;
 
 int main(int argc, char *argv[]) {
-  Magick::InitializeMagick(argv[0]);
+  Magick::InitializeMagick(argv[0]); // should only be needed on Windows/MacOS, kept anyways
 
-  const Magick::Image img(argv[1]);
+  Magick::Image img(argv[1]);
+
+  clock_t time = clock();
+  /* img.filterType(Magick::FilterType::LanczosFilter); */
+  img.filterType(Magick::FilterType::GaussianFilter);
+  img.resize(Magick::Geometry(128, 128));
+  std::cout << "downsize: " << float(clock() - time) / CLOCKS_PER_SEC << "\n";
 
   std::vector<mcu::Argb> argbs{};
 
+  time = clock();
   for (size_t i = 0; i < img.rows(); i++) {
     for (size_t j = 0; j < img.columns(); j++) {
       Magick::ColorRGB rgb(img.pixelColor(j, i));
+      uint8_t a = rgb.alpha() * 0xFF;
       uint8_t r = rgb.red() * 0xFF;
       uint8_t g = rgb.green() * 0xFF;
       uint8_t b = rgb.blue() * 0xFF;
-      uint8_t a = rgb.alpha() * 0xFF;
       argbs.push_back(mcu::Argb((a << 24) | (r << 16) | (g << 8) | (b << 0)));
     }
   }
+  std::cout << "extract pixels: " << float(clock() - time) / CLOCKS_PER_SEC << "\n";
 
+  time = clock();
   mcu::QuantizerResult res = mcu::QuantizeCelebi(argbs, 4);
+  std::cout << "QuantizeCelebi: " << float(clock() - time) / CLOCKS_PER_SEC << "\n";
+
+  time = clock();
   std::vector<mcu::Argb> colors = mcu::RankedSuggestions(res.color_to_count, {.desired = 4, .fallback_color_argb = 0x0});
+  std::cout << "RankedSuggestions: " << float(clock() - time) / CLOCKS_PER_SEC << "\n";
 
-  std::ios fmt(nullptr);
-  fmt.copyfmt(std::cout);
-
-  std::cout << std::setfill('0') << std::setw(8) << std::hex;
-  for (const auto c : colors) {
-    std::cout << c << std::endl;
-  }
-
-  std::cout.copyfmt(fmt);
+  /* std::ios fmt(nullptr); */
+  /* fmt.copyfmt(std::cout); */
+  /**/
+  /* std::cout << std::setfill('0') << std::setw(8) << std::hex; */
+  /* for (const auto c : colors) { */
+  /*   std::cout << c << std::endl; */
+  /* } */
+  /**/
+  /* std::cout.copyfmt(fmt); */
 
   json obj = json::object();
 
@@ -120,5 +135,5 @@ int main(int argc, char *argv[]) {
     add_color(OnTertiaryFixed);
     add_color(OnTertiaryFixedVariant);
   }
-  std::cout << std::setw(2) << obj << std::endl;
+  /* std::cout << std::setw(2) << obj << std::endl; */
 }
